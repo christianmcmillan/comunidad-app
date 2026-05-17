@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Users } from 'lucide-react'
+import { Users, Lock, CheckCircle2, Circle } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
 import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useGroupsStore from '../../store/useGroupsStore'
@@ -19,8 +19,13 @@ export default function GruposPage({ hideTopBar = false }) {
   const [activeTab, setActiveTab] = useState('encuentra')
   const [activeFilter, setActiveFilter] = useState('Todos')
   const { groups } = useGroupsStore()
-  const { groupId, addXP, attendGroup } = useUserStore()
+  const { groupId, addXP, attendGroup, crecerSteps } = useUserStore()
   const { showToast } = useToastStore()
+
+  // Verifiable requirements for leadership
+  const hasGroup        = !!groupId
+  const hasInfluencia   = crecerSteps?.influencia === 'completed'
+  const canApply        = hasGroup && hasInfluencia
 
   const myGroup = groups.find((g) => g.id === groupId)
 
@@ -32,6 +37,7 @@ export default function GruposPage({ hideTopBar = false }) {
   const tabs = [
     { id: 'encuentra', label: 'Encuentra un Grupo' },
     { id: 'mi', label: 'Mi Grupo' },
+    { id: 'lider', label: 'Ser Líder' },
   ]
 
   const handleAttend = () => {
@@ -116,6 +122,146 @@ export default function GruposPage({ hideTopBar = false }) {
           <div className="mx-4">
             <WhatsAppButton label="Grupos" phone="573165295200" message="Hola, quiero info sobre grupos pequeños 👋" />
           </div>
+        </div>
+      )}
+
+      {/* Ser Líder */}
+      {activeTab === 'lider' && (
+        <div className="px-4 flex flex-col gap-3">
+
+          {/* Hero status card */}
+          <div
+            className="rounded-2xl p-5"
+            style={{
+              background: canApply
+                ? 'linear-gradient(135deg, rgba(255,107,44,0.15) 0%, rgba(255,107,44,0.05) 100%)'
+                : '#242424',
+              border: canApply ? '1px solid rgba(255,107,44,0.3)' : '1px solid #333',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-2">
+              {canApply ? (
+                <span className="text-2xl">🙌</span>
+              ) : (
+                <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: '#333' }}>
+                  <Lock size={16} style={{ color: '#666' }} />
+                </div>
+              )}
+              <div>
+                <p className="text-white font-bold">
+                  {canApply ? '¡Estás listo para dar el paso!' : 'Quiero ser líder'}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: canApply ? '#FF6B2C' : '#666' }}>
+                  {canApply
+                    ? 'Cumples los requisitos verificables'
+                    : 'Completa los requisitos para continuar'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Requirements checklist */}
+          <div className="rounded-2xl p-4" style={{ background: '#242424' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#FF6B2C' }}>
+              Requisitos
+            </p>
+            <div className="flex flex-col gap-3">
+
+              {/* 1 — Group attendance */}
+              <div className="flex items-start gap-3">
+                {hasGroup
+                  ? <CheckCircle2 size={17} className="mt-0.5 flex-shrink-0" style={{ color: '#34d399' }} />
+                  : <Circle size={17} className="mt-0.5 flex-shrink-0" style={{ color: '#444' }} />
+                }
+                <div>
+                  <p className="text-sm font-medium" style={{ color: hasGroup ? '#e5e5e5' : '#666' }}>
+                    Asistir activamente a un grupo de discipulado
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: '#555' }}>
+                    Mínimo 6 meses · verificado por tu líder
+                  </p>
+                </div>
+              </div>
+
+              {/* 2 — Leader endorsement */}
+              <div className="flex items-start gap-3">
+                <Circle size={17} className="mt-0.5 flex-shrink-0" style={{ color: '#444' }} />
+                <div>
+                  <p className="text-sm font-medium" style={{ color: '#666' }}>
+                    Aval de tu líder
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: '#555' }}>
+                    Tu líder confirma que estás listo
+                  </p>
+                </div>
+              </div>
+
+              {/* 3 — Influencia completed */}
+              <div className="flex items-start gap-3">
+                {hasInfluencia
+                  ? <CheckCircle2 size={17} className="mt-0.5 flex-shrink-0" style={{ color: '#34d399' }} />
+                  : <Circle size={17} className="mt-0.5 flex-shrink-0" style={{ color: '#444' }} />
+                }
+                <div>
+                  <p className="text-sm font-medium" style={{ color: hasInfluencia ? '#e5e5e5' : '#666' }}>
+                    Haber completado Crecer — Influencia
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: '#555' }}>
+                    Encuentro, Vida e Influencia finalizados
+                  </p>
+                </div>
+              </div>
+
+              {/* 4 — Interview form */}
+              <div className="flex items-start gap-3">
+                <Circle size={17} className="mt-0.5 flex-shrink-0" style={{ color: '#444' }} />
+                <div>
+                  <p className="text-sm font-medium" style={{ color: '#666' }}>
+                    Llenar el formulario de entrevista
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: '#555' }}>
+                    Se habilita al cumplir los requisitos anteriores
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Generaciones note */}
+          <div
+            className="rounded-2xl p-4"
+            style={{ background: 'rgba(167,139,250,0.07)', border: '1px solid rgba(167,139,250,0.15)' }}
+          >
+            <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#a78bfa' }}>
+              Grupos de Generaciones
+            </p>
+            <p className="text-xs leading-relaxed" style={{ color: '#888' }}>
+              Para liderar un grupo de Generaciones (7–9, 10–13 o 14–17 años) también debes
+              estar sirviendo en Experiencia en algún área de generaciones{' '}
+              <span style={{ color: '#a78bfa' }}>mínimo 6 meses</span>.
+            </p>
+          </div>
+
+          {/* CTA */}
+          {canApply ? (
+            <button
+              className="w-full text-white rounded-2xl py-3.5 text-sm font-semibold transition-all active:scale-95"
+              style={{ background: '#FF6B2C' }}
+              onClick={() => showToast({ message: 'Formulario enviado 🎉 Te contactaremos pronto', type: 'success', xp: 50 })}
+            >
+              Llenar formulario de entrevista →
+            </button>
+          ) : (
+            <div
+              className="w-full rounded-2xl py-3.5 text-sm font-semibold text-center"
+              style={{ background: '#1f1f1f', color: '#444', border: '1px solid #2a2a2a' }}
+            >
+              <Lock size={13} className="inline mr-1.5 mb-0.5" />
+              Formulario bloqueado
+            </div>
+          )}
+
+          <WhatsAppButton label="Grupos" phone="573165295200" message="Hola, quiero info sobre cómo ser líder de grupo 🙋" />
         </div>
       )}
 
