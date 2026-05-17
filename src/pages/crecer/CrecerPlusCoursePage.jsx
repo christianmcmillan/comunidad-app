@@ -8,7 +8,7 @@ const COURSES = {
     title: 'Teología Fundamental',
     emoji: '📜',
     description: 'Un recorrido por las doctrinas esenciales de la fe cristiana.',
-    color: '#6366f1',
+    color: '#FF6B2C',
     modules: [
       {
         id: 'm1', title: 'Bienvenido', emoji: '📚',
@@ -53,7 +53,7 @@ const COURSES = {
     title: 'Hechos 29',
     emoji: '⚡',
     description: 'La historia de la iglesia continúa. Tu parte en la misión.',
-    color: '#f59e0b',
+    color: '#FF6B2C',
     modules: [
       {
         id: 'm1', title: 'La Iglesia Primitiva', emoji: '🏛️',
@@ -94,9 +94,9 @@ export default function CrecerPlusCoursePage() {
 
   const course = COURSES[courseId]
   if (!course) return (
-    <div className="p-4 text-slate-400 text-sm">
+    <div className="p-4 text-sm" style={{ color: '#888' }}>
       Curso no encontrado.{' '}
-      <button onClick={() => navigate('/discipulado')} className="text-indigo-400 underline">Volver</button>
+      <button onClick={() => navigate('/discipulado')} style={{ color: '#FF6B2C' }} className="underline">Volver</button>
     </div>
   )
 
@@ -104,7 +104,6 @@ export default function CrecerPlusCoursePage() {
   const allLessons = course.modules.flatMap(m => m.lessons)
   const completedCount = Math.round((progress / 100) * allLessons.length)
 
-  // Track which lesson is open
   const [activeLesson, setActiveLesson] = useState(allLessons[Math.max(0, completedCount - 1)] || allLessons[0])
   const [expandedModules, setExpandedModules] = useState({ [course.modules[0].id]: true })
   const [comment, setComment] = useState('')
@@ -127,24 +126,26 @@ export default function CrecerPlusCoursePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen" style={{ background: '#1a1a1a' }}>
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur border-b border-slate-700 px-4 py-3 flex items-center gap-3">
-        <button onClick={() => navigate('/discipulado')} className="text-slate-400 hover:text-white">
+      <div
+        className="sticky top-0 z-10 backdrop-blur px-4 py-3 flex items-center gap-3"
+        style={{ background: 'rgba(26,26,26,0.95)', borderBottom: '1px solid #2e2e2e' }}
+      >
+        <button onClick={() => navigate('/discipulado')} style={{ color: '#888' }} className="hover:text-white transition-colors">
           <ArrowLeft size={20} />
         </button>
         <div className="flex-1 min-w-0">
           <p className="text-white font-bold text-sm truncate">{course.title}</p>
-          <p className="text-xs text-slate-400">{progress}% completado</p>
+          <p className="text-xs" style={{ color: '#888' }}>{progress}% completado</p>
         </div>
-        {/* Progress bar */}
-        <div className="w-20 bg-slate-700 h-1.5 rounded-full overflow-hidden">
-          <div className="h-1.5 rounded-full transition-all" style={{ width: `${progress}%`, backgroundColor: course.color }} />
+        <div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ background: '#333' }}>
+          <div className="h-1.5 rounded-full transition-all" style={{ width: `${progress}%`, background: '#FF6B2C' }} />
         </div>
       </div>
 
       {/* Active lesson video */}
-      <div className="bg-slate-800 border-b border-slate-700">
+      <div style={{ borderBottom: '1px solid #2e2e2e' }}>
         {activeLesson.type === 'video' ? (
           <div className="aspect-video bg-black relative">
             <iframe
@@ -156,43 +157,49 @@ export default function CrecerPlusCoursePage() {
             />
           </div>
         ) : (
-          <div className="aspect-video bg-slate-700 flex flex-col items-center justify-center gap-3">
+          <div className="aspect-video flex flex-col items-center justify-center gap-3" style={{ background: '#242424' }}>
             <span className="text-5xl">{TYPE_ICON[activeLesson.type]}</span>
-            <p className="text-slate-300 text-sm font-medium">{activeLesson.title}</p>
+            <p className="text-sm font-medium" style={{ color: '#ccc' }}>{activeLesson.title}</p>
             {activeLesson.type === 'file' && (
-              <button className="text-xs bg-indigo-600 text-white px-4 py-2 rounded-xl font-medium">
+              <button
+                className="text-xs text-white px-4 py-2 rounded-xl font-medium"
+                style={{ background: '#FF6B2C' }}
+              >
                 Descargar archivo
               </button>
             )}
           </div>
         )}
 
-        {/* Lesson title bar */}
-        <div className="px-4 py-3">
+        <div className="px-4 py-3" style={{ background: '#1f1f1f' }}>
           <p className="text-white font-semibold text-sm">{activeLesson.title}</p>
           {activeLesson.duration && (
-            <p className="text-xs text-slate-400 mt-0.5">⏱ {activeLesson.duration}</p>
+            <p className="text-xs mt-0.5" style={{ color: '#888' }}>⏱ {activeLesson.duration}</p>
           )}
         </div>
       </div>
 
       {/* Module / lesson list */}
-      <div className="border-b border-slate-700">
+      <div style={{ borderBottom: '1px solid #2e2e2e' }}>
         <div className="px-4 py-2">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Contenido del curso</p>
+          <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#666' }}>Contenido del curso</p>
         </div>
         {course.modules.map((module) => (
           <div key={module.id}>
             <button
               onClick={() => toggleModule(module.id)}
-              className="w-full flex items-center gap-3 px-4 py-3 bg-slate-800/50 border-t border-slate-700/50 hover:bg-slate-700/30 transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:opacity-80"
+              style={{ background: '#242424', borderTop: '1px solid #2a2a2a' }}
             >
               <span className="text-base">{module.emoji}</span>
-              <span className="flex-1 text-left text-sm font-semibold text-slate-200">{module.title}</span>
-              <span className="text-xs text-slate-500 mr-1">
+              <span className="flex-1 text-left text-sm font-semibold text-white">{module.title}</span>
+              <span className="text-xs mr-1" style={{ color: '#666' }}>
                 {module.lessons.filter(l => isCompleted(l.id)).length}/{module.lessons.length}
               </span>
-              {expandedModules[module.id] ? <ChevronDown size={14} className="text-slate-500" /> : <ChevronRight size={14} className="text-slate-500" />}
+              {expandedModules[module.id]
+                ? <ChevronDown size={14} style={{ color: '#666' }} />
+                : <ChevronRight size={14} style={{ color: '#666' }} />
+              }
             </button>
 
             {expandedModules[module.id] && module.lessons.map((lesson) => {
@@ -202,20 +209,29 @@ export default function CrecerPlusCoursePage() {
                 <button
                   key={lesson.id}
                   onClick={() => setActiveLesson(lesson)}
-                  className={`w-full flex items-center gap-3 px-5 py-3 border-t border-slate-700/30 transition-colors ${
-                    isActive ? 'bg-indigo-600/10 border-l-2 border-l-indigo-500' : 'hover:bg-slate-800/50'
-                  }`}
+                  className="w-full flex items-center gap-3 px-5 py-3 transition-colors"
+                  style={{
+                    borderTop: '1px solid #272727',
+                    background: isActive ? 'rgba(255,107,44,0.08)' : undefined,
+                    borderLeft: isActive ? '2px solid #FF6B2C' : '2px solid transparent',
+                  }}
                 >
                   {done
-                    ? <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                    ? <CheckCircle2 size={16} style={{ color: '#34d399', flexShrink: 0 }} />
                     : isActive
-                      ? <Play size={16} className="text-indigo-400 flex-shrink-0" />
-                      : <Circle size={16} className="text-slate-600 flex-shrink-0" />
+                      ? <Play size={16} style={{ color: '#FF6B2C', flexShrink: 0 }} />
+                      : <Circle size={16} style={{ color: '#444', flexShrink: 0 }} />
                   }
-                  <span className={`flex-1 text-left text-sm ${isActive ? 'text-white font-medium' : done ? 'text-slate-400' : 'text-slate-300'}`}>
+                  <span
+                    className="flex-1 text-left text-sm"
+                    style={{
+                      color: isActive ? '#fff' : done ? '#666' : '#ccc',
+                      fontWeight: isActive ? '600' : undefined,
+                    }}
+                  >
                     {lesson.title}
                   </span>
-                  <span className="text-xs text-slate-600">{lesson.duration}</span>
+                  <span className="text-xs" style={{ color: '#555' }}>{lesson.duration}</span>
                 </button>
               )
             })}
@@ -226,44 +242,56 @@ export default function CrecerPlusCoursePage() {
       {/* Comments */}
       <div className="px-4 py-4 pb-8">
         <div className="flex items-center gap-2 mb-4">
-          <MessageCircle size={15} className="text-slate-400" />
+          <MessageCircle size={15} style={{ color: '#888' }} />
           <p className="text-sm font-bold text-white">Comentarios</p>
         </div>
 
-        {/* Comment input */}
         <div className="mb-4">
           <textarea
             value={comment}
             onChange={e => setComment(e.target.value)}
             placeholder="Escribe un comentario o pregunta..."
             rows={3}
-            className="w-full bg-slate-800 text-white text-sm px-3 py-2.5 rounded-xl border border-slate-700 placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+            className="w-full text-white text-sm px-3 py-2.5 rounded-xl focus:outline-none resize-none"
+            style={{
+              background: '#242424',
+              border: '1px solid #333',
+              color: '#fff',
+            }}
           />
           <button
             onClick={handleSubmitComment}
             disabled={!comment.trim()}
-            className="mt-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-700 disabled:text-slate-500 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
+            className="mt-2 text-white text-sm font-medium px-4 py-2 rounded-xl transition-all"
+            style={
+              comment.trim()
+                ? { background: '#FF6B2C' }
+                : { background: '#2e2e2e', color: '#555', cursor: 'not-allowed' }
+            }
           >
             Comentar
           </button>
         </div>
 
         {comments.length === 0 ? (
-          <p className="text-slate-500 text-sm text-center py-6 bg-slate-800 rounded-2xl">
+          <p className="text-sm text-center py-6 rounded-2xl" style={{ color: '#666', background: '#242424' }}>
             No hay comentarios aún. ¡Sé el primero en comentar!
           </p>
         ) : (
           <div className="flex flex-col gap-3">
             {comments.map(c => (
-              <div key={c.id} className="bg-slate-800 rounded-2xl p-4">
+              <div key={c.id} className="rounded-2xl p-4" style={{ background: '#242424' }}>
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-full bg-indigo-600/40 flex items-center justify-center text-xs font-bold text-indigo-300">
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                    style={{ background: 'rgba(255,107,44,0.25)', color: '#FF6B2C' }}
+                  >
                     {c.author.charAt(0)}
                   </div>
-                  <span className="text-xs font-semibold text-slate-300">{c.author}</span>
-                  <span className="text-xs text-slate-600">{c.time}</span>
+                  <span className="text-xs font-semibold" style={{ color: '#ccc' }}>{c.author}</span>
+                  <span className="text-xs" style={{ color: '#555' }}>{c.time}</span>
                 </div>
-                <p className="text-sm text-slate-300 leading-relaxed">{c.text}</p>
+                <p className="text-sm leading-relaxed" style={{ color: '#ccc' }}>{c.text}</p>
               </div>
             ))}
           </div>

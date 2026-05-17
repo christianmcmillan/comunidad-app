@@ -5,10 +5,10 @@ import useGroupsStore from '../../store/useGroupsStore'
 import useUserStore from '../../store/useUserStore'
 
 const typeColors = {
-  Familias: 'bg-amber-600/20 text-amber-300',
-  Mujeres: 'bg-pink-600/20 text-pink-300',
-  Hombres: 'bg-blue-600/20 text-blue-300',
-  Jóvenes: 'bg-emerald-600/20 text-emerald-300',
+  Familias: { background: 'rgba(251,191,36,0.1)', color: '#fbbf24' },
+  Mujeres:  { background: 'rgba(244,114,182,0.1)', color: '#f472b6' },
+  Hombres:  { background: 'rgba(96,165,250,0.1)', color: '#60a5fa' },
+  Jóvenes:  { background: 'rgba(52,211,153,0.1)', color: '#34d399' },
 }
 
 const typeFilters = ['Todos', 'Familias', 'Mujeres', 'Hombres', 'Jóvenes']
@@ -47,11 +47,12 @@ export default function GruposPage({ hideTopBar = false }) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className="flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+            style={
               activeTab === tab.id
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-700 text-slate-300'
-            }`}
+                ? { background: '#FF6B2C', color: '#fff' }
+                : { background: '#2e2e2e', color: '#888' }
+            }
           >
             {tab.label}
           </button>
@@ -67,11 +68,12 @@ export default function GruposPage({ hideTopBar = false }) {
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                className="flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-all"
+                style={
                   activeFilter === f
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-slate-700 text-slate-400'
-                }`}
+                    ? { background: '#FF6B2C', color: '#fff' }
+                    : { background: '#2e2e2e', color: '#888' }
+                }
               >
                 {f}
               </button>
@@ -79,28 +81,28 @@ export default function GruposPage({ hideTopBar = false }) {
           </div>
 
           {filteredGroups.map((group) => (
-            <div key={group.id} className="bg-slate-800 rounded-2xl mx-4 mb-3 p-4">
+            <div key={group.id} className="rounded-2xl mx-4 mb-3 p-4" style={{ background: '#242424' }}>
               <div className="flex items-start justify-between gap-2 mb-1">
                 <p className="text-white font-semibold">{group.name}</p>
-                <span className={`flex-shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${typeColors[group.type] || 'bg-slate-600/20 text-slate-300'}`}>
+                <span
+                  className="flex-shrink-0 text-xs px-2 py-0.5 rounded-full font-medium"
+                  style={typeColors[group.type] || { background: '#2e2e2e', color: '#888' }}
+                >
                   {group.type}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mb-1">
+              <p className="text-xs mb-1" style={{ color: '#666' }}>
                 {group.day} {group.time} · {group.neighborhood}
               </p>
-              <p className="text-xs text-slate-400 mb-3 leading-relaxed">{group.description}</p>
+              <p className="text-xs mb-3 leading-relaxed" style={{ color: '#888' }}>{group.description}</p>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-slate-500">
-                    👤 {group.leaderName}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    {group.members}/{group.maxSize} personas
-                  </p>
+                  <p className="text-xs" style={{ color: '#666' }}>👤 {group.leaderName}</p>
+                  <p className="text-xs" style={{ color: '#666' }}>{group.members}/{group.maxSize} personas</p>
                 </div>
                 <button
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-4 py-2 text-sm font-medium transition-colors"
+                  className="text-white rounded-xl px-4 py-2 text-sm font-medium transition-all"
+                  style={{ background: '#FF6B2C' }}
                   onClick={() => alert(`¡Tu solicitud fue enviada a ${group.leaderName}!`)}
                 >
                   Quiero unirme
@@ -116,34 +118,38 @@ export default function GruposPage({ hideTopBar = false }) {
         <div className="px-4">
           {myGroup ? (
             <div>
-              <div className="bg-slate-800 rounded-2xl p-4 mb-3">
-                <p className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1">Mi grupo</p>
+              <div className="rounded-2xl p-4 mb-3" style={{ background: '#242424' }}>
+                <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FF6B2C' }}>Mi grupo</p>
                 <p className="text-white font-bold text-base mb-1">{myGroup.name}</p>
-                <p className="text-xs text-slate-400 mb-3">{myGroup.description}</p>
+                <p className="text-xs mb-3" style={{ color: '#888' }}>{myGroup.description}</p>
 
                 <div className="grid grid-cols-2 gap-2 mb-3">
-                  <div className="bg-slate-700/50 rounded-xl p-2.5">
-                    <p className="text-xs text-slate-500">Reunión</p>
+                  <div className="rounded-xl p-2.5" style={{ background: '#1f1f1f' }}>
+                    <p className="text-xs" style={{ color: '#666' }}>Reunión</p>
                     <p className="text-sm text-white font-medium">{myGroup.day} {myGroup.time}</p>
                   </div>
-                  <div className="bg-slate-700/50 rounded-xl p-2.5">
-                    <p className="text-xs text-slate-500">Sector</p>
+                  <div className="rounded-xl p-2.5" style={{ background: '#1f1f1f' }}>
+                    <p className="text-xs" style={{ color: '#666' }}>Sector</p>
                     <p className="text-sm text-white font-medium">{myGroup.neighborhood}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 p-2.5 bg-slate-700/30 rounded-xl mb-3">
-                  <div className="w-8 h-8 rounded-full bg-indigo-600/30 flex items-center justify-center">
-                    <Users size={16} className="text-indigo-400" />
+                <div className="flex items-center gap-2 p-2.5 rounded-xl mb-3" style={{ background: '#1f1f1f' }}>
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center"
+                    style={{ background: 'rgba(255,107,44,0.2)' }}
+                  >
+                    <Users size={16} style={{ color: '#FF6B2C' }} />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Mi Líder</p>
+                    <p className="text-xs" style={{ color: '#666' }}>Mi Líder</p>
                     <p className="text-sm text-white font-medium">{myGroup.leaderName}</p>
                   </div>
                 </div>
 
                 <button
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-2.5 text-sm font-medium transition-colors"
+                  className="w-full text-white rounded-xl py-2.5 text-sm font-medium transition-all"
+                  style={{ background: '#FF6B2C' }}
                   onClick={handleAttend}
                 >
                   ✅ Asistí esta semana
@@ -152,12 +158,13 @@ export default function GruposPage({ hideTopBar = false }) {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-16 gap-3">
-              <Users size={48} className="text-slate-600" />
-              <p className="text-sm text-slate-500 text-center">
+              <Users size={48} style={{ color: '#444' }} />
+              <p className="text-sm text-center" style={{ color: '#777' }}>
                 Aún no perteneces a un grupo.
               </p>
               <button
-                className="bg-indigo-600 text-white rounded-xl px-4 py-2 text-sm font-medium"
+                className="text-white rounded-xl px-4 py-2 text-sm font-medium"
+                style={{ background: '#FF6B2C' }}
                 onClick={() => setActiveTab('encuentra')}
               >
                 Encontrar mi grupo →

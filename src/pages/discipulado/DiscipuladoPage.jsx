@@ -18,11 +18,12 @@ export default function DiscipuladoPage() {
           <button
             key={id}
             onClick={() => setActive(id)}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
+            style={
               active === id
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-            }`}
+                ? { background: '#FF6B2C', color: '#fff' }
+                : { background: '#242424', color: '#777' }
+            }
           >
             <Icon size={15} />
             {label}

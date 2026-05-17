@@ -24,10 +24,10 @@ function formatDate(dateStr) {
 }
 
 const categoryColors = {
-  Crecer: 'bg-indigo-600/30 text-indigo-300',
-  Conferencia: 'bg-purple-600/30 text-purple-300',
-  Seminario: 'bg-emerald-600/30 text-emerald-300',
-  Especial: 'bg-amber-600/30 text-amber-300',
+  Crecer:      { background: 'rgba(255,107,44,0.12)', color: '#FF6B2C' },
+  Conferencia: { background: 'rgba(167,139,250,0.12)', color: '#a78bfa' },
+  Seminario:   { background: 'rgba(52,211,153,0.12)', color: '#34d399' },
+  Especial:    { background: 'rgba(251,191,36,0.12)', color: '#fbbf24' },
 }
 
 export default function EventosPage() {
@@ -52,11 +52,12 @@ export default function EventosPage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className="flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+            style={
               activeTab === tab.id
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-700 text-slate-300'
-            }`}
+                ? { background: '#FF6B2C', color: '#fff' }
+                : { background: '#2e2e2e', color: '#888' }
+            }
           >
             {tab.label}
           </button>
@@ -67,19 +68,23 @@ export default function EventosPage() {
       {activeTab === 'fds' && (
         <div>
           {services.map((s) => (
-            <div key={s.id} className="bg-slate-800 rounded-2xl mx-4 mb-3 p-4">
+            <div key={s.id} className="rounded-2xl mx-4 mb-3 p-4" style={{ background: '#242424' }}>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold text-indigo-400 bg-indigo-600/20 px-2 py-0.5 rounded-full">
+                <span
+                  className="text-xs font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: 'rgba(255,107,44,0.15)', color: '#FF6B2C' }}
+                >
                   {s.day} {s.time}
                 </span>
               </div>
               <p className="text-white font-semibold mb-3">Servicio Comunidad</p>
               <div className="flex gap-2">
-                <button className="text-xs text-indigo-400 font-medium">
+                <button className="text-xs font-medium" style={{ color: '#FF6B2C' }}>
                   Ver programa →
                 </button>
                 <button
-                  className="ml-auto bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-3 py-1.5 text-xs font-medium transition-colors"
+                  className="ml-auto text-white rounded-xl px-3 py-1.5 text-xs font-medium transition-all"
+                  style={{ background: '#FF6B2C' }}
                   onClick={() => alert('¡Check-in realizado! 🎉')}
                 >
                   Check-in Generaciones
@@ -94,25 +99,25 @@ export default function EventosPage() {
       {activeTab === 'proximos' && (
         <div>
           {events.map((event) => (
-            <div key={event.id} className="bg-slate-800 rounded-2xl mx-4 mb-3 p-4">
+            <div key={event.id} className="rounded-2xl mx-4 mb-3 p-4" style={{ background: '#242424' }}>
               <div className="flex items-start justify-between gap-2 mb-2">
                 <p className="text-white font-semibold leading-snug">{event.title}</p>
                 <span
-                  className={`flex-shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${
-                    categoryColors[event.category] || 'bg-slate-600/30 text-slate-300'
-                  }`}
+                  className="flex-shrink-0 text-xs font-medium px-2 py-0.5 rounded-full"
+                  style={categoryColors[event.category] || { background: '#2e2e2e', color: '#888' }}
                 >
                   {event.category}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mb-3 leading-relaxed">{event.description}</p>
+              <p className="text-xs mb-3 leading-relaxed" style={{ color: '#888' }}>{event.description}</p>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-slate-500">{formatDate(event.date)}</p>
-                  <p className="text-sm font-bold text-emerald-400">{formatPrice(event.price)}</p>
+                  <p className="text-xs" style={{ color: '#666' }}>{formatDate(event.date)}</p>
+                  <p className="text-sm font-bold" style={{ color: '#34d399' }}>{formatPrice(event.price)}</p>
                 </div>
                 <button
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-4 py-2 text-sm font-medium transition-colors"
+                  className="text-white rounded-xl px-4 py-2 text-sm font-medium transition-all"
+                  style={{ background: '#FF6B2C' }}
                   onClick={() => {
                     signup(event.id)
                     alert(`¡Te inscribiste para ${event.title}!`)
@@ -131,10 +136,11 @@ export default function EventosPage() {
         <div>
           {signedUpEvents.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 gap-3">
-              <Calendar size={48} className="text-slate-600" />
-              <p className="text-sm text-slate-500">Aún no tienes inscripciones</p>
+              <Calendar size={48} style={{ color: '#444' }} />
+              <p className="text-sm" style={{ color: '#777' }}>Aún no tienes inscripciones</p>
               <button
-                className="text-xs text-indigo-400 font-medium"
+                className="text-xs font-medium"
+                style={{ color: '#FF6B2C' }}
                 onClick={() => setActiveTab('proximos')}
               >
                 Ver próximos eventos →
@@ -143,12 +149,15 @@ export default function EventosPage() {
           ) : (
             <div>
               {signedUpEvents.map((event) => (
-                <div key={event.id} className="bg-slate-800 rounded-2xl mx-4 mb-3 p-4">
+                <div key={event.id} className="rounded-2xl mx-4 mb-3 p-4" style={{ background: '#242424' }}>
                   <p className="text-white font-semibold">{event.title}</p>
-                  <p className="text-xs text-slate-400 mt-1">{formatDate(event.date)}</p>
+                  <p className="text-xs mt-1" style={{ color: '#888' }}>{formatDate(event.date)}</p>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-sm font-bold text-emerald-400">{formatPrice(event.price)}</span>
-                    <span className="text-xs text-emerald-400 bg-emerald-600/20 px-2 py-0.5 rounded-full font-medium">
+                    <span className="text-sm font-bold" style={{ color: '#34d399' }}>{formatPrice(event.price)}</span>
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full font-medium"
+                      style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399' }}
+                    >
                       ✅ Inscrito
                     </span>
                   </div>

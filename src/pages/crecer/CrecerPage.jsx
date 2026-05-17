@@ -79,11 +79,12 @@ export default function CrecerPage({ hideTopBar = false }) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className="flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+            style={
               activeTab === tab.id
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-700 text-slate-300'
-            }`}
+                ? { background: '#FF6B2C', color: '#fff' }
+                : { background: '#2e2e2e', color: '#888' }
+            }
           >
             {tab.label}
           </button>
@@ -100,39 +101,44 @@ export default function CrecerPage({ hideTopBar = false }) {
             return (
               <div
                 key={step.id}
-                className={`relative bg-slate-800 rounded-2xl p-4 overflow-hidden ${locked ? 'opacity-50' : ''}`}
+                className="relative rounded-2xl p-4 overflow-hidden"
+                style={{ background: '#242424', opacity: locked ? 0.5 : 1 }}
               >
                 {locked && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-slate-800/60 rounded-2xl z-10">
-                    <Lock size={28} className="text-slate-500" />
+                  <div
+                    className="absolute inset-0 flex items-center justify-center rounded-2xl z-10"
+                    style={{ background: 'rgba(26,26,26,0.6)' }}
+                  >
+                    <Lock size={28} style={{ color: '#555' }} />
                   </div>
                 )}
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <span className="text-xs text-slate-500 font-medium">Paso {step.number}</span>
+                    <span className="text-xs font-medium" style={{ color: '#666' }}>Paso {step.number}</span>
                     <p className="text-white font-bold text-base">{step.title}</p>
                   </div>
                   {status === 'none' && !locked && (
-                    <span className="text-xs text-slate-400 bg-slate-700 px-2 py-0.5 rounded-full">
+                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: '#2e2e2e', color: '#888' }}>
                       Próximamente
                     </span>
                   )}
                   {status === 'registered' && (
-                    <span className="text-xs text-amber-400 bg-amber-600/20 px-2 py-0.5 rounded-full">
+                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24' }}>
                       Inscrito ⏳
                     </span>
                   )}
                   {status === 'completed' && (
-                    <span className="text-xs text-emerald-400 bg-emerald-600/20 px-2 py-0.5 rounded-full">
+                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399' }}>
                       Completado ✅
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-400 mb-3 leading-relaxed">{step.description}</p>
-                <p className="text-xs text-slate-500 mb-3">📅 {step.nextDate}</p>
+                <p className="text-xs mb-3 leading-relaxed" style={{ color: '#888' }}>{step.description}</p>
+                <p className="text-xs mb-3" style={{ color: '#666' }}>📅 {step.nextDate}</p>
                 {status === 'none' && !locked && (
                   <button
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-2.5 text-sm font-medium transition-colors"
+                    className="w-full text-white rounded-xl py-2.5 text-sm font-medium transition-all"
+                    style={{ background: '#FF6B2C' }}
                     onClick={() => handleRegister(step)}
                   >
                     Inscribirme
@@ -141,13 +147,14 @@ export default function CrecerPage({ hideTopBar = false }) {
                 {status === 'registered' && (
                   <button
                     disabled
-                    className="w-full bg-slate-700 text-slate-500 rounded-xl py-2.5 text-sm font-medium cursor-not-allowed"
+                    className="w-full rounded-xl py-2.5 text-sm font-medium cursor-not-allowed"
+                    style={{ background: '#2e2e2e', color: '#555' }}
                   >
                     En progreso…
                   </button>
                 )}
                 {status === 'completed' && (
-                  <div className="text-center text-sm text-emerald-400 font-medium py-1">
+                  <div className="text-center text-sm font-medium py-1" style={{ color: '#34d399' }}>
                     ¡Completado! 🎉
                   </div>
                 )}
@@ -163,25 +170,29 @@ export default function CrecerPage({ hideTopBar = false }) {
           {seedSeminars.map((seminar) => {
             const completed = seminarsCompleted.includes(seminar.id)
             return (
-              <div key={seminar.id} className="bg-slate-800 rounded-2xl p-4 flex flex-col">
+              <div key={seminar.id} className="rounded-2xl p-4 flex flex-col" style={{ background: '#242424' }}>
                 <div className="relative mb-2">
                   <span className="text-3xl">{seminar.emoji}</span>
                   {completed && (
-                    <span className="absolute top-0 right-0 text-xs bg-emerald-600/20 text-emerald-400 px-1.5 py-0.5 rounded-full">
+                    <span
+                      className="absolute top-0 right-0 text-xs px-1.5 py-0.5 rounded-full"
+                      style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399' }}
+                    >
                       ✅
                     </span>
                   )}
                 </div>
                 <p className="text-white font-semibold text-sm mb-1">{seminar.title}</p>
-                <p className="text-xs text-slate-400 mb-2 leading-relaxed flex-1">{seminar.description}</p>
-                <p className="text-xs text-slate-500 mb-3">📅 {seminar.nextDate}</p>
+                <p className="text-xs mb-2 leading-relaxed flex-1" style={{ color: '#888' }}>{seminar.description}</p>
+                <p className="text-xs mb-3" style={{ color: '#666' }}>📅 {seminar.nextDate}</p>
                 {completed ? (
-                  <div className="text-center text-xs text-emerald-400 font-medium py-1">
+                  <div className="text-center text-xs font-medium py-1" style={{ color: '#34d399' }}>
                     ¡Ya asististe!
                   </div>
                 ) : (
                   <button
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-2 text-xs font-medium transition-colors"
+                    className="w-full text-white rounded-xl py-2 text-xs font-medium transition-all"
+                    style={{ background: '#FF6B2C' }}
                     onClick={() => alert(`¡Inscripción en ${seminar.title} registrada! 🎉`)}
                   >
                     Inscribirme
@@ -197,16 +208,19 @@ export default function CrecerPage({ hideTopBar = false }) {
       {activeTab === 'plus' && (
         <div className="px-4">
           {!influenciaCompleted ? (
-            <div className="bg-slate-800 rounded-2xl p-6 flex flex-col items-center gap-3">
-              <Lock size={36} className="text-slate-500" />
+            <div className="rounded-2xl p-6 flex flex-col items-center gap-3" style={{ background: '#242424' }}>
+              <Lock size={36} style={{ color: '#555' }} />
               <p className="text-white font-bold text-center">Desbloquea Crecer+</p>
-              <p className="text-xs text-slate-400 text-center leading-relaxed">
+              <p className="text-xs text-center leading-relaxed" style={{ color: '#888' }}>
                 Completa el paso Influencia para acceder a los cursos de formación avanzada.
               </p>
-              <div className="w-full bg-slate-700 h-1.5 rounded-full mt-2">
+              <div className="w-full h-1.5 rounded-full mt-2" style={{ background: '#333' }}>
                 <div
-                  className="bg-indigo-500 h-1.5 rounded-full"
-                  style={{ width: `${(Object.values(crecerSteps).filter(s => s === 'completed').length / 3) * 100}%` }}
+                  className="h-1.5 rounded-full"
+                  style={{
+                    background: '#FF6B2C',
+                    width: `${(Object.values(crecerSteps).filter(s => s === 'completed').length / 3) * 100}%`,
+                  }}
                 />
               </div>
             </div>
@@ -215,33 +229,34 @@ export default function CrecerPage({ hideTopBar = false }) {
               {courseProgress.map((course) => {
                 const progress = crecerPlusProgress[course.id] ?? 0
                 return (
-                  <div key={course.id} className="bg-slate-800 rounded-2xl p-4">
+                  <div key={course.id} className="rounded-2xl p-4" style={{ background: '#242424' }}>
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-2xl">{course.emoji}</span>
                       <div className="flex-1">
                         <p className="text-white font-semibold">{course.title}</p>
                       </div>
-                      {progress === 100 && <span className="text-xs text-emerald-400 font-medium">✅</span>}
+                      {progress === 100 && <span className="text-xs" style={{ color: '#34d399' }}>✅</span>}
                     </div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <p className="text-xs text-slate-400">Progreso</p>
-                      <p className="text-xs text-slate-400 font-medium">{progress}%</p>
+                      <p className="text-xs" style={{ color: '#888' }}>Progreso</p>
+                      <p className="text-xs font-medium" style={{ color: '#888' }}>{progress}%</p>
                     </div>
-                    <div className="bg-slate-700 h-2 rounded-full overflow-hidden mb-3">
+                    <div className="h-2 rounded-full overflow-hidden mb-3" style={{ background: '#333' }}>
                       <div
-                        className="bg-indigo-500 h-2 rounded-full transition-all"
-                        style={{ width: `${progress}%` }}
+                        className="h-2 rounded-full transition-all"
+                        style={{ width: `${progress}%`, background: '#FF6B2C' }}
                       />
                     </div>
                     <button
                       onClick={() => navigate(`/crecer-plus/${course.id}`)}
-                      className={`w-full rounded-xl py-2 text-sm font-medium transition-colors ${
+                      className="w-full rounded-xl py-2 text-sm font-medium transition-all"
+                      style={
                         progress === 100
-                          ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30'
+                          ? { background: 'rgba(52,211,153,0.1)', color: '#34d399', border: '1px solid rgba(52,211,153,0.3)' }
                           : progress > 0
-                            ? 'bg-indigo-600/30 border border-indigo-500 text-indigo-300 hover:bg-indigo-600/50'
-                            : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                      }`}
+                            ? { background: 'rgba(255,107,44,0.12)', color: '#FF6B2C', border: '1px solid rgba(255,107,44,0.4)' }
+                            : { background: '#FF6B2C', color: '#fff' }
+                      }
                     >
                       {progress === 100 ? 'Ver curso completo' : progress > 0 ? 'Continuar →' : 'Comenzar →'}
                     </button>

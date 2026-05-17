@@ -93,12 +93,12 @@ export default function JourneyMap() {
   }
 
   return (
-    <div className="mx-4 mb-4 bg-slate-800 rounded-2xl overflow-hidden">
+    <div className="mx-4 mb-4 rounded-2xl overflow-hidden" style={{ background: '#242424' }}>
       <div className="px-4 pt-4 pb-1">
-        <p className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Tu Camino</p>
+        <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#FF6B2C' }}>Tu Camino</p>
       </div>
       <div className="relative">
-        <div className="absolute left-10 top-6 bottom-6 w-0.5 border-l-2 border-dashed border-slate-700 z-0" />
+        <div className="absolute left-10 top-6 bottom-6 w-0.5 border-l-2 border-dashed z-0" style={{ borderColor: '#333' }} />
         <div className="relative z-10">
           {nodes.map((node) => (
             <JourneyNode

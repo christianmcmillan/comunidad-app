@@ -10,7 +10,7 @@ import MasPage from './pages/mas/MasPage'
 
 export default function App() {
   return (
-    <div className="w-full max-w-[430px] min-h-dvh bg-slate-900 relative flex flex-col mx-auto overflow-hidden">
+    <div className="w-full max-w-[430px] min-h-dvh relative flex flex-col mx-auto overflow-hidden" style={{ background: '#1a1a1a' }}>
       <div className="flex-1 overflow-y-auto pb-20">
         <Routes>
           <Route path="/" element={<Navigate to="/home" replace />} />

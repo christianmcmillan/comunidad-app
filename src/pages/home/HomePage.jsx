@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import TopBar from '../../components/layout/TopBar'
+import ComunidadLogo from '../../components/ComunidadLogo'
 import XPBar from '../../components/journey/XPBar'
 import JourneyMap from '../../components/journey/JourneyMap'
 import useUserStore, { getLevel } from '../../store/useUserStore'
@@ -21,18 +21,50 @@ export default function HomePage() {
 
   return (
     <div className="pb-4">
-      <TopBar
-        title={`¡Hola, ${firstName}! 👋`}
-        subtitle={todayLabel.charAt(0).toUpperCase() + todayLabel.slice(1)}
-      />
+      {/* Header */}
+      <div className="px-4 pt-10 pb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: '#FF6B2C' }}
+          >
+            <ComunidadLogo size={26} />
+          </div>
+          <div>
+            <p className="text-xs font-medium" style={{ color: '#FF6B2C' }}>
+              {todayLabel.charAt(0).toUpperCase() + todayLabel.slice(1)}
+            </p>
+            <h1 className="text-lg font-bold text-white leading-tight">
+              ¡Hola, {firstName}!
+            </h1>
+          </div>
+        </div>
+        {/* Streak pill */}
+        <div
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold"
+          style={{ background: 'rgba(255,107,44,0.15)', color: '#FF6B2C', border: '1px solid rgba(255,107,44,0.3)' }}
+        >
+          <span>🔥</span>
+          <span>{streak}</span>
+        </div>
+      </div>
 
-      {/* Streak card */}
-      <div className="bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/30 rounded-2xl p-4 mx-4 mb-4">
-        <p className="text-white font-bold text-base">
-          🔥 {streak} {streak === 1 ? 'día seguido' : 'días seguidos'}
+      {/* Hero streak card */}
+      <div
+        className="mx-4 mb-4 rounded-2xl p-4"
+        style={{ background: 'linear-gradient(135deg, #FF6B2C 0%, #e85a1a 100%)' }}
+      >
+        <p className="text-white font-bold text-base leading-snug">
+          {streak === 1
+            ? '¡Llevas 1 día seguido con Dios! 🙌'
+            : streak < 7
+            ? `${streak} días seguidos con Dios 💪`
+            : streak < 30
+            ? `¡${streak} días de racha! Sigue brillando 🔥`
+            : `${streak} días de racha 🏆 ¡Extraordinario!`}
         </p>
-        <p className="text-xs text-orange-300/80 mt-0.5">
-          ¡Sigue así! Vuelve mañana para mantener tu racha.
+        <p className="text-white/80 text-xs mt-1">
+          Vuelve mañana para mantener tu racha.
         </p>
       </div>
 
@@ -44,23 +76,28 @@ export default function HomePage() {
 
       {/* Quick actions */}
       <div className="px-4">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Acceso rápido</p>
+        <p
+          className="text-xs font-bold uppercase tracking-wider mb-2"
+          style={{ color: '#666' }}
+        >
+          Acceso rápido
+        </p>
         <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-xl bg-slate-800 p-3 flex flex-col items-center gap-1.5">
-            <span className="text-2xl">📅</span>
-            <span className="text-xs text-slate-300 text-center font-medium leading-tight">Próximo servicio</span>
-            <span className="text-xs text-slate-500">Sábado 5pm</span>
-          </div>
-          <div className="rounded-xl bg-slate-800 p-3 flex flex-col items-center gap-1.5">
-            <span className="text-2xl">📖</span>
-            <span className="text-xs text-slate-300 text-center font-medium leading-tight">Devocional</span>
-            <span className="text-xs text-slate-500 text-center leading-tight">{seedDevotional.title}</span>
-          </div>
-          <div className="rounded-xl bg-slate-800 p-3 flex flex-col items-center gap-1.5">
-            <span className="text-2xl">📢</span>
-            <span className="text-xs text-slate-300 text-center font-medium leading-tight">Anuncio</span>
-            <span className="text-xs text-slate-500 text-center leading-tight">{truncatedTitle}</span>
-          </div>
+          {[
+            { emoji: '📅', title: 'Próximo servicio', sub: 'Sábado 5pm' },
+            { emoji: '📖', title: 'Devocional', sub: seedDevotional.title },
+            { emoji: '📢', title: 'Anuncio', sub: truncatedTitle },
+          ].map(({ emoji, title, sub }) => (
+            <div
+              key={title}
+              className="rounded-xl p-3 flex flex-col items-center gap-1.5"
+              style={{ background: '#242424' }}
+            >
+              <span className="text-2xl">{emoji}</span>
+              <span className="text-xs text-white text-center font-medium leading-tight">{title}</span>
+              <span className="text-xs text-center leading-tight" style={{ color: '#666' }}>{sub}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

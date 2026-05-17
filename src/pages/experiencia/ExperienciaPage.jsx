@@ -7,25 +7,24 @@ import PlanesTab from './PlanesTab'
 import EquiposTab from './EquiposTab'
 
 const checklist = [
+  { label: 'Asistir al grupo fielmente 6 meses', key: 'grupo' },
   { label: 'Completa Encuentro', key: 'encuentro' },
   { label: 'Completa Vida', key: 'vida' },
-  { label: 'Completa Influencia', key: 'influencia' },
   { label: 'Aprobación de tu líder', key: 'lider' },
 ]
 
 export default function ExperienciaPage() {
-  const { xp, volunteerApproved, crecerSteps } = useUserStore()
+  const { volunteerApproved, crecerSteps, groupId } = useUserStore()
   const [activeTab, setActiveTab] = useState('agenda')
 
-  const unlocked = xp >= 2500 && volunteerApproved
-
   const checks = {
+    grupo: !!groupId,
     encuentro: crecerSteps.encuentro === 'completed',
     vida: crecerSteps.vida === 'completed',
-    influencia: crecerSteps.influencia === 'completed',
     lider: volunteerApproved,
   }
   const doneCount = Object.values(checks).filter(Boolean).length
+  const unlocked = Object.values(checks).every(Boolean)
 
   if (!unlocked) {
     return (
@@ -33,36 +32,42 @@ export default function ExperienciaPage() {
         <TopBar title="Experiencia" />
         <div className="px-4 pt-2">
           {/* Hero locked card */}
-          <div className="bg-slate-800 rounded-2xl p-6 mb-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-slate-700 flex items-center justify-center mx-auto mb-4">
-              <Lock size={28} className="text-slate-400" />
+          <div className="rounded-2xl p-6 mb-4 text-center" style={{ background: '#242424' }}>
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ background: '#2e2e2e' }}
+            >
+              <Lock size={28} style={{ color: '#666' }} />
             </div>
             <h2 className="text-white font-bold text-lg mb-1">Área de Voluntarios</h2>
-            <p className="text-slate-400 text-sm">Completa tu camino de discipulado para acceder a la plataforma de Experiencia.</p>
+            <p className="text-sm" style={{ color: '#888' }}>
+              Completa tu camino de discipulado para acceder a la plataforma de Experiencia.
+            </p>
           </div>
 
           {/* Checklist */}
-          <div className="bg-slate-800 rounded-2xl p-4 mb-4">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Requisitos</p>
+          <div className="rounded-2xl p-4 mb-4" style={{ background: '#242424' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#666' }}>Requisitos</p>
             <div className="flex flex-col gap-3">
               {checklist.map((item) => (
                 <div key={item.key} className="flex items-center gap-3">
-                  <span className={`text-lg ${checks[item.key] ? 'text-emerald-400' : 'text-slate-600'}`}>
-                    {checks[item.key] ? '✅' : '⬜'}
-                  </span>
-                  <span className={`text-sm font-medium ${checks[item.key] ? 'text-slate-200' : 'text-slate-500'}`}>
+                  <span className="text-lg">{checks[item.key] ? '✅' : '⬜'}</span>
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: checks[item.key] ? '#e5e5e5' : '#666' }}
+                  >
                     {item.label}
                   </span>
                 </div>
               ))}
             </div>
-            <div className="mt-4 bg-slate-700 h-2 rounded-full overflow-hidden">
+            <div className="mt-4 h-2 rounded-full overflow-hidden" style={{ background: '#333' }}>
               <div
-                className="bg-indigo-500 h-2 rounded-full transition-all"
-                style={{ width: `${(doneCount / 4) * 100}%` }}
+                className="h-2 rounded-full transition-all"
+                style={{ width: `${(doneCount / 4) * 100}%`, background: '#FF6B2C' }}
               />
             </div>
-            <p className="text-xs text-slate-500 mt-1.5">{doneCount}/4 requisitos completados</p>
+            <p className="text-xs mt-1.5" style={{ color: '#666' }}>{doneCount}/4 requisitos completados</p>
           </div>
         </div>
       </div>
@@ -80,16 +85,17 @@ export default function ExperienciaPage() {
     <div>
       <TopBar title="Experiencia" />
       {/* Sub-tab bar */}
-      <div className="flex border-b border-slate-700 px-4 mb-0">
+      <div className="flex px-4 mb-0" style={{ borderBottom: '1px solid #2e2e2e' }}>
         {tabs.map(({ id, label, Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
+            className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px"
+            style={
               activeTab === id
-                ? 'border-indigo-500 text-indigo-400'
-                : 'border-transparent text-slate-500 hover:text-slate-300'
-            }`}
+                ? { borderBottomColor: '#FF6B2C', color: '#FF6B2C' }
+                : { borderBottomColor: 'transparent', color: '#777' }
+            }
           >
             <Icon size={14} />
             {label}
