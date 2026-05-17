@@ -1,0 +1,45 @@
+import { useState, useEffect } from 'react'
+import ComunidadLogo from '../ComunidadLogo'
+
+export default function SplashScreen({ onDone }) {
+  const [exiting, setExiting] = useState(false)
+
+  useEffect(() => {
+    // 0.8s zoom-in + 0.5s hold = 1.3s before exit starts
+    const holdTimer = setTimeout(() => setExiting(true), 1300)
+    // 0.35s exit animation, then unmount
+    const doneTimer = setTimeout(onDone, 1650)
+    return () => { clearTimeout(holdTimer); clearTimeout(doneTimer) }
+  }, [])
+
+  return (
+    <div
+      className={exiting ? 'splash-exit' : ''}
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 100,
+        background: '#1a1a1a',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 16,
+        pointerEvents: 'none',
+      }}
+    >
+      <div className="splash-logo">
+        <ComunidadLogo size={110} />
+      </div>
+      <p style={{
+        color: '#3a3a3a',
+        fontSize: 11,
+        letterSpacing: '0.18em',
+        fontWeight: 700,
+        textTransform: 'uppercase',
+      }}>
+        Comunidad
+      </p>
+    </div>
+  )
+}

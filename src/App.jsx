@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import BottomTabs from './components/layout/BottomTabs'
 import Toast from './components/ui/Toast'
 import DemoFAB from './components/ui/DemoFAB'
+import SplashScreen from './components/ui/SplashScreen'
 import HomePage from './pages/home/HomePage'
 import EventosPage from './pages/eventos/EventosPage'
 import DiscipuladoPage from './pages/discipulado/DiscipuladoPage'
@@ -12,6 +14,15 @@ import MasPage from './pages/mas/MasPage'
 import DevocionalPage from './pages/devocional/DevocionalPage'
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(
+    () => !sessionStorage.getItem('splash-shown')
+  )
+
+  function handleSplashDone() {
+    sessionStorage.setItem('splash-shown', '1')
+    setShowSplash(false)
+  }
+
   return (
     <div
       className="w-full max-w-[430px] min-h-dvh relative flex flex-col mx-auto overflow-hidden"
@@ -34,6 +45,7 @@ export default function App() {
       <BottomTabs />
       <DemoFAB />
       <Toast />
+      {showSplash && <SplashScreen onDone={handleSplashDone} />}
     </div>
   )
 }
