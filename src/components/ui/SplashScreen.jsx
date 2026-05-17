@@ -19,7 +19,7 @@ export default function SplashScreen({ onDone }) {
         position: 'absolute',
         inset: 0,
         zIndex: 100,
-        background: '#1a1a1a',
+        background: '#FF6B2C',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -32,7 +32,7 @@ export default function SplashScreen({ onDone }) {
         <ComunidadLogo size={110} />
       </div>
       <p style={{
-        color: '#3a3a3a',
+        color: 'rgba(255,255,255,0.6)',
         fontSize: 11,
         letterSpacing: '0.18em',
         fontWeight: 700,
