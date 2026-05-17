@@ -1,7 +1,7 @@
 export default function ComunidadLogo({ size = 36, className = '' }) {
   return (
     <img
-      src="/comunidad-app/logo.png"
+      src="/logo.png"
       width={size}
       height={size}
       className={className}
