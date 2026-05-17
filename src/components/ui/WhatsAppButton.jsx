@@ -22,7 +22,7 @@ export default function WhatsAppButton({ label, phone, message = '' }) {
     >
       <WhatsAppIcon />
       <div className="text-left">
-        <p className="text-xs font-semibold" style={{ color: '#25D366' }}>¿Tienes preguntas sobre {label}?</p>
+        <p className="text-xs font-semibold" style={{ color: '#25D366' }}>{label}</p>
         <p className="text-xs" style={{ color: '#666' }}>Escríbenos por WhatsApp →</p>
       </div>
     </button>

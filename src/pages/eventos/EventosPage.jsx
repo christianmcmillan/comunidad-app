@@ -81,7 +81,7 @@ function WeekendTab() {
         </button>
       </div>
 
-      <WhatsAppButton label="Hola · Atención y Oración" phone="573012881329" message="Hola, quiero conectarme con Comunidad 👋" />
+      <WhatsAppButton label="Hola Comunidad — Atención y Oración" phone="573012881329" message="Hola, quiero conectarme con Comunidad 👋" />
     </div>
   )
 }
