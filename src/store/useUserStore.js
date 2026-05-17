@@ -73,6 +73,13 @@ const useUserStore = create(
             volunteerApproved: true,
             groupId: 'g-1',
             crecerPlusProgress: { 'teologia-fundamental': 85, 'hechos-29': 60 },
+            nextAssignment: {
+              planTitle: 'Reuniones Fines de Semana',
+              dates: '16 & 17 de mayo 2026',
+              times: ['Sáb 5pm', 'Dom 9am'],
+              team: 'Producción',
+              position: 'Cámara 1',
+            },
           })
         } else {
           set({ ...seedUser })

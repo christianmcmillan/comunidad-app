@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Lock } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
+import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useUserStore from '../../store/useUserStore'
 import useToastStore from '../../store/useToastStore'
 import { seedSeminars } from '../../data/seed'
@@ -163,12 +164,14 @@ export default function CrecerPage({ hideTopBar = false, initialTab = null }) {
               </div>
             )
           })}
+          <WhatsAppButton label="Crecer" phone="573165295200" message="Hola, quiero info sobre el proceso Crecer 🌱" />
         </div>
       )}
 
       {/* Seminarios */}
       {activeTab === 'seminarios' && (
-        <div className="px-4 grid grid-cols-2 gap-3">
+        <div className="px-4">
+        <div className="grid grid-cols-2 gap-3">
           {seedSeminars.map((seminar) => {
             const completed = seminarsCompleted.includes(seminar.id)
             return (
@@ -203,6 +206,8 @@ export default function CrecerPage({ hideTopBar = false, initialTab = null }) {
               </div>
             )
           })}
+        </div>
+        <WhatsAppButton label="Seminarios" phone="573011147734" message="Hola, quiero info sobre los Seminarios 📚" />
         </div>
       )}
 

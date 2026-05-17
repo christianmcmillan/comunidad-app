@@ -17,6 +17,7 @@ export const seedUser = {
   leaderId: 'p-carlos',
   volunteerApproved: false,
   crecerPlusProgress: { 'teologia-fundamental': 22, 'hechos-29': 0 },
+  nextAssignment: null,
 }
 
 export const seedGroups = [
@@ -29,7 +30,7 @@ export const seedGroups = [
 
 export const seedEvents = [
   { id: 'ev-1', title: 'Encuentro Mayo', description: 'Retiro de fin de semana en Casa Encuentro, San Antonio de Prado. Una experiencia transformadora de 2 días.', date: '2026-05-23', endDate: '2026-05-24', price: 250000, category: 'Crecer', image: null, capacity: 40, signups: 28, cta: 'Inscribirme' },
-  { id: 'ev-2', title: 'Conferencia Comunidad 2026 LEGADO', description: 'Nuestra conferencia anual. 3 noches de encuentro con Dios, adoración y palabra.', date: '2026-06-12', endDate: '2026-06-14', price: 0, category: 'Conferencia', image: null, capacity: 500, signups: 312, cta: 'Registrarme' },
+  { id: 'ev-2', title: 'Conferencia Comunidad 2026 LEGADO', description: 'Nuestra conferencia anual. 3 noches de encuentro con Dios, adoración y palabra.', date: '2026-06-12', endDate: '2026-06-14', price: 250000, category: 'Conferencia', image: null, capacity: 500, signups: 312, cta: 'Registrarme' },
   { id: 'ev-3', title: 'Seminario Escuela de Héroes', description: 'Para padres que quieren pastorear el corazón de sus hijos.', date: '2026-08-09', endDate: '2026-08-10', price: 0, category: 'Seminario', image: null, capacity: 60, signups: 18, cta: 'Inscribirme' },
   { id: 'ev-4', title: 'Semana Santa Comunidad', description: 'Servicios especiales de Semana Santa con adoración en vivo.', date: '2026-04-05', endDate: '2026-04-06', price: 0, category: 'Especial', image: null, capacity: 1000, signups: 600, cta: 'Apartar lugar' },
 ]

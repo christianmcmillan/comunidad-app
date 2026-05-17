@@ -4,41 +4,39 @@ import { es } from 'date-fns/locale'
 import ComunidadLogo from '../../components/ComunidadLogo'
 import XPBar from '../../components/journey/XPBar'
 import JourneyMap from '../../components/journey/JourneyMap'
+import LiveBanner from '../../components/ui/LiveBanner'
+import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useUserStore, { getLevel } from '../../store/useUserStore'
-import { seedDevotional, seedAnnouncements } from '../../data/seed'
+import useYoutubeLive from '../../hooks/useYoutubeLive'
+import { seedAnnouncements } from '../../data/seed'
 
 const todayLabel = format(new Date(), "EEEE d 'de' MMMM", { locale: es })
 
 export default function HomePage() {
   const navigate = useNavigate()
-  const { name, xp, streak } = useUserStore()
+  const { name, xp, streak, nextAssignment } = useUserStore()
+  const { isLive, videoId } = useYoutubeLive()
   const firstName = name.split(' ')[0]
   const level = getLevel(xp)
 
-  const announcement = seedAnnouncements[0]
-  const truncatedTitle =
-    announcement.title.length > 30
-      ? announcement.title.slice(0, 30) + '…'
-      : announcement.title
-
   const quickActions = [
     {
-      emoji: '📅',
-      title: 'Próximo servicio',
-      sub: 'Sábado 5pm',
-      onTap: () => navigate('/eventos'),
+      emoji: '🎪',
+      title: 'App Experiencia',
+      sub: 'Voluntarios & Equipos',
+      onTap: () => navigate('/experiencia'),
     },
     {
-      emoji: '📖',
-      title: 'Devocional',
-      sub: seedDevotional.title,
-      onTap: () => navigate('/devocional'),
+      emoji: '🌱',
+      title: 'Tu próximo paso',
+      sub: 'Crecer en comunidad',
+      onTap: () => navigate('/discipulado'),
     },
     {
-      emoji: '📢',
-      title: 'Anuncio',
-      sub: truncatedTitle,
-      onTap: () => navigate('/eventos', { state: { tab: 'proximos' } }),
+      emoji: '🎵',
+      title: 'Nuevo Álbum',
+      sub: 'Comunidad Music',
+      onTap: () => window.open(seedAnnouncements[0]?.ctaUrl || 'https://open.spotify.com', '_blank'),
     },
   ]
 
@@ -90,6 +88,40 @@ export default function HomePage() {
         </p>
       </div>
 
+      {/* Próximo servicio en Experiencia */}
+      {nextAssignment && (
+        <button
+          onClick={() => navigate('/experiencia')}
+          className="mx-4 mb-4 rounded-2xl p-4 text-left w-[calc(100%-2rem)] transition-all active:scale-95"
+          style={{ background: '#1a1f2e', border: '1px solid rgba(99,102,241,0.35)' }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: '#818cf8' }}>
+              📋 Próximo Servicio
+            </span>
+            <span className="text-xs" style={{ color: '#4f46e5' }}>Ver detalles →</span>
+          </div>
+          <p className="text-white font-semibold text-sm leading-snug">{nextAssignment.planTitle}</p>
+          <p className="text-xs mt-0.5 mb-2" style={{ color: '#666' }}>{nextAssignment.dates}</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            {nextAssignment.times.map(t => (
+              <span
+                key={t}
+                className="text-xs px-2 py-0.5 rounded-full font-medium"
+                style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}
+              >
+                {t}
+              </span>
+            ))}
+            <span className="text-xs" style={{ color: '#555' }}>·</span>
+            <span className="text-xs" style={{ color: '#666' }}>{nextAssignment.team} · {nextAssignment.position}</span>
+          </div>
+        </button>
+      )}
+
+      {/* YouTube Live banner (only when streaming) */}
+      {isLive && <LiveBanner videoId={videoId} />}
+
       {/* Journey map */}
       <JourneyMap />
 
@@ -115,6 +147,11 @@ export default function HomePage() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Hola — general contact */}
+      <div className="px-4 mt-1 mb-2">
+        <WhatsAppButton label="Comunidad" phone="573012881329" message="Hola, quiero conectarme con Comunidad 👋" />
       </div>
     </div>
   )

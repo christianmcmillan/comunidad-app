@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Lock, Calendar, List, Users } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
+import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useUserStore from '../../store/useUserStore'
 import MiAgendaTab from './MiAgendaTab'
 import PlanesTab from './PlanesTab'
@@ -69,6 +70,7 @@ export default function ExperienciaPage() {
             </div>
             <p className="text-xs mt-1.5" style={{ color: '#666' }}>{doneCount}/4 requisitos completados</p>
           </div>
+          <WhatsAppButton label="Experiencia" phone="573004015172" message="Hola, quiero saber cómo ser voluntario en Experiencia 🙌" />
         </div>
       </div>
     )

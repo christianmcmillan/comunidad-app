@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Users } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
+import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useGroupsStore from '../../store/useGroupsStore'
 import useUserStore from '../../store/useUserStore'
 import useToastStore from '../../store/useToastStore'
@@ -112,6 +113,9 @@ export default function GruposPage({ hideTopBar = false }) {
               </div>
             </div>
           ))}
+          <div className="mx-4">
+            <WhatsAppButton label="Grupos" phone="573165295200" message="Hola, quiero info sobre grupos pequeños 👋" />
+          </div>
         </div>
       )}
 
@@ -173,6 +177,7 @@ export default function GruposPage({ hideTopBar = false }) {
               </button>
             </div>
           )}
+          <WhatsAppButton label="Grupos" phone="573165295200" message="Hola, quiero info sobre grupos pequeños 👋" />
         </div>
       )}
     </div>
