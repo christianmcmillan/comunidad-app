@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { Calendar, MapPin } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
+import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useEventsStore from '../../store/useEventsStore'
 import useToastStore from '../../store/useToastStore'
 
@@ -80,14 +81,7 @@ function WeekendTab() {
         </button>
       </div>
 
-      {/* Ver programa */}
-      <button
-        onClick={() => navigate('/experiencia/plan/plan-1')}
-        className="w-full rounded-2xl py-3 text-sm font-medium transition-all active:scale-95"
-        style={{ background: '#242424', color: '#FF6B2C', border: '1px solid rgba(255,107,44,0.3)' }}
-      >
-        Ver programa del servicio →
-      </button>
+      <WhatsAppButton label="Hola · Atención y Oración" phone="573012881329" message="Hola, quiero conectarme con Comunidad 👋" />
     </div>
   )
 }
