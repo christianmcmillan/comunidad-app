@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Lock } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
 import useUserStore from '../../store/useUserStore'
+import useToastStore from '../../store/useToastStore'
 import { seedSeminars } from '../../data/seed'
 
 const stepDefs = [
@@ -38,10 +39,11 @@ const stepDefs = [
   },
 ]
 
-export default function CrecerPage({ hideTopBar = false }) {
+export default function CrecerPage({ hideTopBar = false, initialTab = null }) {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('pasos')
+  const [activeTab, setActiveTab] = useState(initialTab || 'pasos')
   const { crecerSteps, updateCrecerStep, addXP, seminarsCompleted, crecerPlusProgress } = useUserStore()
+  const { showToast } = useToastStore()
 
   const tabs = [
     { id: 'pasos', label: 'Mis Pasos' },
@@ -59,7 +61,7 @@ export default function CrecerPage({ hideTopBar = false }) {
     if (crecerSteps[step.id] !== 'none') return
     updateCrecerStep(step.id, 'registered')
     addXP(step.xpOnRegister)
-    alert(`¡Te inscribiste en ${step.title}! +${step.xpOnRegister} XP 🎉`)
+    showToast({ message: `¡Inscrito en ${step.title}!`, type: 'success', xp: step.xpOnRegister })
   }
 
   const influenciaCompleted = crecerSteps.influencia === 'completed'
@@ -193,7 +195,7 @@ export default function CrecerPage({ hideTopBar = false }) {
                   <button
                     className="w-full text-white rounded-xl py-2 text-xs font-medium transition-all"
                     style={{ background: '#FF6B2C' }}
-                    onClick={() => alert(`¡Inscripción en ${seminar.title} registrada! 🎉`)}
+                    onClick={() => showToast({ message: `¡Inscrito en ${seminar.title}!`, type: 'success' })}
                   >
                     Inscribirme
                   </button>

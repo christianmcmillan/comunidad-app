@@ -3,6 +3,7 @@ import { Users } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
 import useGroupsStore from '../../store/useGroupsStore'
 import useUserStore from '../../store/useUserStore'
+import useToastStore from '../../store/useToastStore'
 
 const typeColors = {
   Familias: { background: 'rgba(251,191,36,0.1)', color: '#fbbf24' },
@@ -18,6 +19,7 @@ export default function GruposPage({ hideTopBar = false }) {
   const [activeFilter, setActiveFilter] = useState('Todos')
   const { groups } = useGroupsStore()
   const { groupId, addXP, attendGroup } = useUserStore()
+  const { showToast } = useToastStore()
 
   const myGroup = groups.find((g) => g.id === groupId)
 
@@ -34,7 +36,7 @@ export default function GruposPage({ hideTopBar = false }) {
   const handleAttend = () => {
     attendGroup()
     addXP(20)
-    alert('¡+20 XP! Asistencia registrada 🙌')
+    showToast({ message: '¡Asistencia registrada! 🙌', type: 'success', xp: 20 })
   }
 
   return (
@@ -103,7 +105,7 @@ export default function GruposPage({ hideTopBar = false }) {
                 <button
                   className="text-white rounded-xl px-4 py-2 text-sm font-medium transition-all"
                   style={{ background: '#FF6B2C' }}
-                  onClick={() => alert(`¡Tu solicitud fue enviada a ${group.leaderName}!`)}
+                  onClick={() => showToast({ message: `Solicitud enviada a ${group.leaderName}`, type: 'info' })}
                 >
                   Quiero unirme
                 </button>

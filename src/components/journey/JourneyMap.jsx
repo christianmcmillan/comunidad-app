@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import useUserStore from '../../store/useUserStore'
 import JourneyNode from './JourneyNode'
 
 export default function JourneyMap() {
+  const navigate = useNavigate()
   const { groupId, crecerSteps, volunteerApproved, seminarsCompleted, crecerPlusProgress, badges } = useUserStore()
 
   const encuentroOk    = crecerSteps.encuentro === 'completed'
@@ -75,21 +77,22 @@ export default function JourneyMap() {
 
   const handleTap = (node) => {
     const status = getNodeStatus(node.id)
-    if (status === 'active') {
-      const msgs = {
-        grupo:                'Ve a Discipulado → Grupos para unirte a un grupo.',
-        encuentro:            'Ve a Discipulado → Crecer → Mis Pasos para inscribirte.',
-        vida:                 'Ve a Discipulado → Crecer → Mis Pasos para inscribirte.',
-        servir:               'Ve a Experiencia para registrarte como voluntario.',
-        influencia:           'Ve a Discipulado → Crecer → Mis Pasos para inscribirte.',
-        'crecer-plus':        'Ve a Discipulado → Crecer → Crecer+ para comenzar un curso.',
-        'seminario-relaciones':'Ve a Discipulado → Crecer → Seminarios para inscribirte.',
-        'seminario-ruta128':  'Ve a Discipulado → Crecer → Seminarios para inscribirte.',
-        lider:                'Habla con tu líder de grupo sobre este próximo paso.',
-        conferencia:          'Ve a Eventos para inscribirte en la Conferencia.',
-      }
-      alert(msgs[node.id] || `¡Siguiente paso: ${node.title}!`)
+    if (status === 'locked') return
+
+    const destinations = {
+      grupo:                  () => navigate('/discipulado', { state: { section: 'grupos' } }),
+      encuentro:              () => navigate('/discipulado', { state: { section: 'crecer', tab: 'pasos' } }),
+      vida:                   () => navigate('/discipulado', { state: { section: 'crecer', tab: 'pasos' } }),
+      servir:                 () => navigate('/experiencia'),
+      influencia:             () => navigate('/discipulado', { state: { section: 'crecer', tab: 'pasos' } }),
+      'crecer-plus':          () => navigate('/discipulado', { state: { section: 'crecer', tab: 'plus' } }),
+      'seminario-relaciones': () => navigate('/discipulado', { state: { section: 'crecer', tab: 'seminarios' } }),
+      'seminario-ruta128':    () => navigate('/discipulado', { state: { section: 'crecer', tab: 'seminarios' } }),
+      lider:                  () => navigate('/discipulado', { state: { section: 'grupos' } }),
+      conferencia:            () => navigate('/eventos'),
     }
+
+    destinations[node.id]?.()
   }
 
   return (

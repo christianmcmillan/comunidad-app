@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { Calendar } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
 import useEventsStore from '../../store/useEventsStore'
+import useToastStore from '../../store/useToastStore'
 
 const services = [
   { id: 's1', day: 'Sáb', time: '5:00pm' },
@@ -31,8 +33,12 @@ const categoryColors = {
 }
 
 export default function EventosPage() {
-  const [activeTab, setActiveTab] = useState('fds')
+  const navigate = useNavigate()
+  const location = useLocation()
   const { events, mySignups, signup } = useEventsStore()
+  const { showToast } = useToastStore()
+
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'fds')
 
   const tabs = [
     { id: 'fds', label: 'Fin de Semana' },
@@ -79,13 +85,17 @@ export default function EventosPage() {
               </div>
               <p className="text-white font-semibold mb-3">Servicio Comunidad</p>
               <div className="flex gap-2">
-                <button className="text-xs font-medium" style={{ color: '#FF6B2C' }}>
+                <button
+                  className="text-xs font-medium transition-all active:scale-95"
+                  style={{ color: '#FF6B2C' }}
+                  onClick={() => navigate('/experiencia/plan/plan-1')}
+                >
                   Ver programa →
                 </button>
                 <button
-                  className="ml-auto text-white rounded-xl px-3 py-1.5 text-xs font-medium transition-all"
+                  className="ml-auto text-white rounded-xl px-3 py-1.5 text-xs font-medium transition-all active:scale-95"
                   style={{ background: '#FF6B2C' }}
-                  onClick={() => alert('¡Check-in realizado! 🎉')}
+                  onClick={() => showToast({ message: '¡Check-in realizado! 🎉', type: 'success' })}
                 >
                   Check-in Generaciones
                 </button>
@@ -116,14 +126,16 @@ export default function EventosPage() {
                   <p className="text-sm font-bold" style={{ color: '#34d399' }}>{formatPrice(event.price)}</p>
                 </div>
                 <button
-                  className="text-white rounded-xl px-4 py-2 text-sm font-medium transition-all"
-                  style={{ background: '#FF6B2C' }}
+                  className="text-white rounded-xl px-4 py-2 text-sm font-medium transition-all active:scale-95"
+                  style={{ background: mySignups.includes(event.id) ? '#2e2e2e' : '#FF6B2C' }}
+                  disabled={mySignups.includes(event.id)}
                   onClick={() => {
+                    if (mySignups.includes(event.id)) return
                     signup(event.id)
-                    alert(`¡Te inscribiste para ${event.title}!`)
+                    showToast({ message: `¡Inscrito en ${event.title}!`, type: 'success', xp: 10 })
                   }}
                 >
-                  {event.cta}
+                  {mySignups.includes(event.id) ? '✓ Inscrito' : event.cta}
                 </button>
               </div>
             </div>

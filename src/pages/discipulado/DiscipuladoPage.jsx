@@ -1,15 +1,20 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Users, BookOpen } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
 import GruposPage from '../grupos/GruposPage'
 import CrecerPage from '../crecer/CrecerPage'
 
 export default function DiscipuladoPage() {
-  const [active, setActive] = useState('crecer')
+  const location = useLocation()
+  const initialSection = location.state?.section || 'crecer'
+  const initialTab = location.state?.tab || null
+
+  const [active, setActive] = useState(initialSection)
+
   return (
     <div>
       <TopBar title="Discipulado" />
-      {/* Section switcher — two large pill tabs */}
       <div className="flex gap-2 px-4 mb-2">
         {[
           { id: 'crecer', label: 'Crecer', Icon: BookOpen },
@@ -30,7 +35,10 @@ export default function DiscipuladoPage() {
           </button>
         ))}
       </div>
-      {active === 'crecer' ? <CrecerPage hideTopBar /> : <GruposPage hideTopBar />}
+      {active === 'crecer'
+        ? <CrecerPage hideTopBar initialTab={initialTab} />
+        : <GruposPage hideTopBar />
+      }
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import ComunidadLogo from '../../components/ComunidadLogo'
@@ -9,6 +10,7 @@ import { seedDevotional, seedAnnouncements } from '../../data/seed'
 const todayLabel = format(new Date(), "EEEE d 'de' MMMM", { locale: es })
 
 export default function HomePage() {
+  const navigate = useNavigate()
   const { name, xp, streak } = useUserStore()
   const firstName = name.split(' ')[0]
   const level = getLevel(xp)
@@ -18,6 +20,27 @@ export default function HomePage() {
     announcement.title.length > 30
       ? announcement.title.slice(0, 30) + '…'
       : announcement.title
+
+  const quickActions = [
+    {
+      emoji: '📅',
+      title: 'Próximo servicio',
+      sub: 'Sábado 5pm',
+      onTap: () => navigate('/eventos'),
+    },
+    {
+      emoji: '📖',
+      title: 'Devocional',
+      sub: seedDevotional.title,
+      onTap: () => navigate('/devocional'),
+    },
+    {
+      emoji: '📢',
+      title: 'Anuncio',
+      sub: truncatedTitle,
+      onTap: () => navigate('/eventos', { state: { tab: 'proximos' } }),
+    },
+  ]
 
   return (
     <div className="pb-4">
@@ -39,7 +62,6 @@ export default function HomePage() {
             </h1>
           </div>
         </div>
-        {/* Streak pill */}
         <div
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold"
           style={{ background: 'rgba(255,107,44,0.15)', color: '#FF6B2C', border: '1px solid rgba(255,107,44,0.3)' }}
@@ -76,27 +98,21 @@ export default function HomePage() {
 
       {/* Quick actions */}
       <div className="px-4">
-        <p
-          className="text-xs font-bold uppercase tracking-wider mb-2"
-          style={{ color: '#666' }}
-        >
+        <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#666' }}>
           Acceso rápido
         </p>
         <div className="grid grid-cols-3 gap-2">
-          {[
-            { emoji: '📅', title: 'Próximo servicio', sub: 'Sábado 5pm' },
-            { emoji: '📖', title: 'Devocional', sub: seedDevotional.title },
-            { emoji: '📢', title: 'Anuncio', sub: truncatedTitle },
-          ].map(({ emoji, title, sub }) => (
-            <div
+          {quickActions.map(({ emoji, title, sub, onTap }) => (
+            <button
               key={title}
-              className="rounded-xl p-3 flex flex-col items-center gap-1.5"
+              onClick={onTap}
+              className="rounded-xl p-3 flex flex-col items-center gap-1.5 text-left transition-all active:scale-95"
               style={{ background: '#242424' }}
             >
               <span className="text-2xl">{emoji}</span>
               <span className="text-xs text-white text-center font-medium leading-tight">{title}</span>
               <span className="text-xs text-center leading-tight" style={{ color: '#666' }}>{sub}</span>
-            </div>
+            </button>
           ))}
         </div>
       </div>
