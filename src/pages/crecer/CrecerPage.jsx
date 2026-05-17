@@ -1,11 +1,127 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock } from 'lucide-react'
+import { Lock, ChevronDown, ChevronUp } from 'lucide-react'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import TopBar from '../../components/layout/TopBar'
 import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useUserStore from '../../store/useUserStore'
 import useToastStore from '../../store/useToastStore'
 import { seedSeminars } from '../../data/seed'
+
+// ── Class Schedules ────────────────────────────────────────────────────────────
+const classSessions = {
+  vida: [
+    { label: 'Clases 1–2',   date: '2026-04-08' },
+    { label: 'Clases 3–4',   date: '2026-04-15' },
+    { label: 'Clases 5–6',   date: '2026-04-22' },
+    { label: 'Clases 7–8',   date: '2026-04-29' },
+    { label: 'Clases 9–10',  date: '2026-05-06' },
+    { label: 'Clases 11–12', date: '2026-05-13' },
+    { label: 'Clases 13–14', date: '2026-05-20' },
+    { label: 'Clases 15–16', date: '2026-05-27' },
+    { label: 'Clases 17–18', date: '2026-06-03' },
+    { label: 'Clases 19–20', date: '2026-06-10' },
+    { label: 'Graduación 🎓', date: '2026-06-17', isGrad: true },
+  ],
+  influencia: [
+    { label: 'Clases 1–2',   date: '2026-08-04' },
+    { label: 'Clases 3–4',   date: '2026-08-11' },
+    { label: 'Clases 5–6',   date: '2026-08-18' },
+    { label: 'Clases 7–8',   date: '2026-08-25' },
+    { label: 'Clases 9–10',  date: '2026-09-01' },
+    { label: 'Clases 11–12', date: '2026-09-08' },
+    { label: 'Clases 13–14', date: '2026-09-15' },
+    { label: 'Clases 15–16', date: '2026-09-22' },
+    { label: 'Clases 17–18', date: '2026-09-29' },
+    { label: 'Clases 19–20', date: '2026-10-06' },
+    { label: 'Graduación 🎓', date: '2026-10-13', isGrad: true },
+  ],
+}
+
+function formatSessionDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return format(new Date(y, m - 1, d), "d MMM", { locale: es })
+}
+
+function ClassSchedule({ stepId }) {
+  const today = new Date().toISOString().split('T')[0]
+  const sessions = classSessions[stepId] || []
+  const [showAll, setShowAll] = useState(false)
+
+  const nextIdx = sessions.findIndex(s => s.date >= today)
+  // Show: last completed session (for context) + all upcoming
+  const visibleStart = Math.max(0, nextIdx - 1)
+  const visible = showAll ? sessions : sessions.slice(visibleStart, visibleStart + 5)
+  const hasMore = sessions.length - visibleStart > 5
+
+  if (sessions.length === 0) return null
+
+  return (
+    <div className="mt-3 pt-3" style={{ borderTop: '1px solid #333' }}>
+      <p className="text-xs font-bold uppercase tracking-wider mb-2.5" style={{ color: '#FF6B2C' }}>
+        Calendario de clases
+      </p>
+      <div className="flex flex-col gap-1.5">
+        {visible.map((s, i) => {
+          const isPast   = s.date < today
+          const isNext   = sessions.indexOf(s) === nextIdx
+          const isFuture = s.date > today
+
+          return (
+            <div
+              key={s.date}
+              className="flex items-center justify-between rounded-xl px-3 py-2 transition-all"
+              style={{
+                background: isNext
+                  ? 'rgba(255,107,44,0.12)'
+                  : isPast
+                    ? 'transparent'
+                    : 'rgba(255,255,255,0.03)',
+                border: isNext
+                  ? '1px solid rgba(255,107,44,0.3)'
+                  : '1px solid transparent',
+              }}
+            >
+              <div className="flex items-center gap-2">
+                {isPast ? (
+                  <span className="text-xs" style={{ color: '#34d399' }}>✓</span>
+                ) : isNext ? (
+                  <span className="text-xs" style={{ color: '#FF6B2C' }}>→</span>
+                ) : (
+                  <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: '#333' }} />
+                )}
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: isPast ? '#444' : isNext ? '#FF6B2C' : '#aaa' }}
+                >
+                  {s.label}
+                </span>
+              </div>
+              <span
+                className="text-xs tabular-nums"
+                style={{ color: isPast ? '#444' : isNext ? '#FF6B2C' : '#666' }}
+              >
+                {formatSessionDate(s.date)}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+
+      {hasMore && (
+        <button
+          onClick={() => setShowAll(v => !v)}
+          className="flex items-center gap-1 mt-2 text-xs font-medium transition-all"
+          style={{ color: '#555' }}
+        >
+          {showAll ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          {showAll ? 'Ver menos' : `Ver ${sessions.length - visibleStart - 5} más`}
+        </button>
+      )}
+    </div>
+  )
+}
 
 const stepDefs = [
   {
@@ -137,10 +253,14 @@ export default function CrecerPage({ hideTopBar = false, initialTab = null }) {
                   )}
                 </div>
                 <p className="text-xs mb-3 leading-relaxed" style={{ color: '#888' }}>{step.description}</p>
-                <p className="text-xs mb-3" style={{ color: '#666' }}>📅 {step.nextDate}</p>
+                {(step.id === 'vida' || step.id === 'influencia') && !locked ? (
+                  <ClassSchedule stepId={step.id} />
+                ) : (
+                  <p className="text-xs mb-3" style={{ color: '#666' }}>📅 {step.nextDate}</p>
+                )}
                 {status === 'none' && !locked && (
                   <button
-                    className="w-full text-white rounded-xl py-2.5 text-sm font-medium transition-all"
+                    className="w-full text-white rounded-xl py-2.5 text-sm font-medium transition-all mt-3"
                     style={{ background: '#FF6B2C' }}
                     onClick={() => handleRegister(step)}
                   >
@@ -150,7 +270,7 @@ export default function CrecerPage({ hideTopBar = false, initialTab = null }) {
                 {status === 'registered' && (
                   <button
                     disabled
-                    className="w-full rounded-xl py-2.5 text-sm font-medium cursor-not-allowed"
+                    className="w-full rounded-xl py-2.5 text-sm font-medium cursor-not-allowed mt-3"
                     style={{ background: '#2e2e2e', color: '#555' }}
                   >
                     En progreso…
