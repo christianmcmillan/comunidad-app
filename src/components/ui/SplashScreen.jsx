@@ -16,8 +16,13 @@ export default function SplashScreen({ onDone }) {
     <div
       className={exiting ? 'splash-exit' : ''}
       style={{
-        position: 'absolute',
-        inset: 0,
+        position: 'fixed',
+        top: 0,
+        bottom: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: 430,
         zIndex: 100,
         background: '#FF6B2C',
         display: 'flex',
