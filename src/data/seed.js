@@ -39,6 +39,49 @@ export const seedAnnouncements = [
   { id: 'ann-2', title: 'Conferencia 2026 LEGADO', body: 'Inscripciones abiertas para la Conferencia Anual. ¡No te la pierdas!', publishedAt: '2026-05-10', cta: 'Inscribirme', ctaUrl: '#', emoji: '🌟' },
 ]
 
+export const seedWeekendMessage = {
+  title: 'Legado',
+  pastor: 'Pastor Alejandro Restrepo',
+  verse: 'Salmos 78:4',
+  verseText: 'Lo contaremos a la generación venidera las alabanzas de Jehová, y su potencia, y las maravillas que hizo.',
+  reuniones: [
+    { id: 'sab-5', label: 'Sáb 5pm' },
+    { id: 'sab-7', label: 'Sáb 7pm' },
+    { id: 'dom-9', label: 'Dom 9am' },
+    { id: 'dom-11', label: 'Dom 11am' },
+  ],
+  quiz: [
+    {
+      id: 'q1',
+      question: '¿Cuál fue el versículo central del mensaje de este fin de semana?',
+      options: ['Juan 3:16', 'Salmos 78:4', 'Romanos 8:28', 'Filipenses 4:13'],
+      correct: 1,
+    },
+    {
+      id: 'q2',
+      question: '¿A qué nos llama Dios según el mensaje "Legado"?',
+      options: [
+        'Acumular riquezas para nuestra familia',
+        'Contar las obras de Dios a la siguiente generación',
+        'Construir una iglesia más grande',
+        'Memorizar más versículos bíblicos',
+      ],
+      correct: 1,
+    },
+    {
+      id: 'q3',
+      question: '¿Qué acción concreta mencionó el pastor para comenzar a dejar legado hoy?',
+      options: [
+        'Aumentar el diezmo este mes',
+        'Leer la Biblia una hora cada día',
+        'Compartir intencionalmente tu fe con alguien cercano esta semana',
+        'Asistir a todas las reuniones del mes',
+      ],
+      correct: 2,
+    },
+  ],
+}
+
 export const seedDevotional = {
   id: 'dev-today',
   date: new Date().toISOString().split('T')[0],
