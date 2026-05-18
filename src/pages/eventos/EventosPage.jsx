@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { Calendar, MapPin } from 'lucide-react'
+import { Calendar, MapPin, CalendarPlus } from 'lucide-react'
 import TopBar from '../../components/layout/TopBar'
 import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useEventsStore from '../../store/useEventsStore'
@@ -17,6 +17,42 @@ function formatDate(dateStr) {
   const [year, month, day] = dateStr.split('-').map(Number)
   const date = new Date(year, month - 1, day)
   return format(date, "d MMM yyyy", { locale: es })
+}
+
+function toIcsDate(dateStr) {
+  return dateStr.replace(/-/g, '')  // "2026-05-23" → "20260523"
+}
+
+function addToCalendar(event) {
+  const start = toIcsDate(event.date)
+  // If multi-day use endDate, otherwise end = same day
+  const rawEnd = event.endDate || event.date
+  // ICS DTEND for all-day is exclusive (day after)
+  const [y, m, d] = rawEnd.split('-').map(Number)
+  const endDate = new Date(y, m - 1, d + 1)
+  const end = `${endDate.getFullYear()}${String(endDate.getMonth()+1).padStart(2,'0')}${String(endDate.getDate()).padStart(2,'0')}`
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Comunidad//App//ES',
+    'BEGIN:VEVENT',
+    `DTSTART;VALUE=DATE:${start}`,
+    `DTEND;VALUE=DATE:${end}`,
+    `SUMMARY:${event.title}`,
+    `DESCRIPTION:${event.description || ''}`,
+    'LOCATION:Av. El Poblado #31-253\\, Medellín',
+    `END:VEVENT`,
+    'END:VCALENDAR',
+  ].join('\r\n')
+
+  const blob = new Blob([ics], { type: 'text/calendar' })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href     = url
+  a.download = `${event.title.replace(/\s+/g, '_')}.ics`
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 const categoryColors = {
@@ -192,12 +228,22 @@ export default function EventosPage() {
                   <p className="text-xs mt-1" style={{ color: '#888' }}>{formatDate(event.date)}</p>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-sm font-bold" style={{ color: '#34d399' }}>{formatPrice(event.price)}</span>
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full font-medium"
-                      style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399' }}
-                    >
-                      ✅ Inscrito
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => addToCalendar(event)}
+                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-xl transition-all active:scale-95"
+                        style={{ background: 'rgba(99,102,241,0.12)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.2)' }}
+                      >
+                        <CalendarPlus size={12} />
+                        Agregar
+                      </button>
+                      <span
+                        className="text-xs px-2 py-0.5 rounded-full font-medium"
+                        style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399' }}
+                      >
+                        ✅ Inscrito
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
