@@ -4,10 +4,10 @@ import { es } from 'date-fns/locale'
 import ComunidadLogo from '../../components/ComunidadLogo'
 import XPBar from '../../components/journey/XPBar'
 import JourneyMap from '../../components/journey/JourneyMap'
-import LiveBanner from '../../components/ui/LiveBanner'
+import LastSermonCard from '../../components/ui/LastSermonCard'
 import WhatsAppButton from '../../components/ui/WhatsAppButton'
 import useUserStore, { getLevel } from '../../store/useUserStore'
-import useYoutubeLive from '../../hooks/useYoutubeLive'
+import useLatestSermon from '../../hooks/useLatestSermon'
 import { seedAnnouncements } from '../../data/seed'
 
 const todayLabel = format(new Date(), "EEEE d 'de' MMMM", { locale: es })
@@ -15,7 +15,7 @@ const todayLabel = format(new Date(), "EEEE d 'de' MMMM", { locale: es })
 export default function HomePage() {
   const navigate = useNavigate()
   const { name, xp, streak, nextAssignment } = useUserStore()
-  const { isLive, videoId } = useYoutubeLive()
+  const { sermon, loading: sermonLoading } = useLatestSermon()
   const firstName = name.split(' ')[0]
   const level = getLevel(xp)
 
@@ -119,8 +119,8 @@ export default function HomePage() {
         </button>
       )}
 
-      {/* YouTube Live banner (only when streaming) */}
-      {isLive && <LiveBanner videoId={videoId} />}
+      {/* Último Mensaje */}
+      <LastSermonCard sermon={sermon} loading={sermonLoading} />
 
       {/* Journey map */}
       <JourneyMap />
